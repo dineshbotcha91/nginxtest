@@ -1,0 +1,25 @@
+server {
+        listen 80;
+        listen [::]:80;
+
+        root /var/www/dinesh_nginx/html;
+        index index.html index.htm;
+
+        server_name dinesh_nginx www.dinesh_nginx;
+
+       
+location / {
+    proxy_pass http://upstream_server;
+
+
+    if ($upstream_http_your_security_header = "") {
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomain";
+        add_header X-Content-Type-Options "nosniff";
+        add_header X-XSS-Protection "1; mode=block";
+        add_header X-Frame-Options "DENY";
+        add_header Content-Security-Policy "frame-ancestors 'none'";
+        add_header Access-Control-Allow-Credentials "TRUE";
+
+    }
+       
+}

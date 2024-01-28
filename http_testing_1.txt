@@ -1,0 +1,13 @@
+server {
+        listen 80;
+        listen [::]:80;
+
+        root /var/www/dinesh_nginx/html;
+        index index.html index.htm;
+
+        server_name dinesh_nginx www.dinesh_nginx;
+
+       location ~* \.(css|jpg|jpeg|js|json|png|mp4|pdf)$ {
+         return 404;
+}
+}

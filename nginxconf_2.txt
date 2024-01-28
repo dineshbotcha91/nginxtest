@@ -1,0 +1,59 @@
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+        worker_connections 768;
+        # multi_accept on;
+}
+
+http {
+
+        ##
+        # Basic Settings
+        ##
+       #proxy_protocol on;
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        types_hash_max_size 2048;
+        # server_tokens off;
+
+         server_names_hash_bucket_size 64;
+        # server_name_in_redirect off;
+
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+
+        ##
+        # SSL Settings
+        ##
+
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3; # Dropping SSLv3, ref: POODLE
+        ssl_prefer_server_ciphers on;
+
+        ##
+        # Logging Settings
+        ##
+        log_format custom_format '$time_local | Nginx Version: $nginx_version | Remote Address: $remote_addr | Request ID: $request_id | Status: $status | Body Bytes Sent: $body_bytes_sent | User Agent: "$http_user_agent" | Proxy Protocol Address: $proxy_protocol_addr | Server Name: $server_name | Upstream address: $upstream_addr | Request Time: $request_time | Upstream Connect Time: $upstream_connect_time | Upstream Header Time: $upstream_header_time | Upstream Response Time: $upstream_response_time | Request URI: $request_uri | Upstream Status: $upstream_status | SSL Session Reused: $ssl_session_reused | X-Forwarded-For: $http_x_forwarded_for';
+
+        access_log /var/log/nginx/access.log custom_format;
+        error_log /var/log/nginx/error.log;
+
+       
+        gzip on;
+
+        
+
+        ##
+        # Virtual Host Configs
+        ##
+
+        include /etc/nginx/conf.d/*.conf;
+        include /etc/nginx/sites-enabled/*;
+}
+
+
+
